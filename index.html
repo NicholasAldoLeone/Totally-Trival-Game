@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+
+        </script>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2" id="trivaPage">
+                <div class="box" id="titleBox">
+                    TOTALLY TRIVAL GAME!
+
+                </div>
+                <div class="col-md-10 offset-md-1" id="questionBox">
+                    <!-- This is the Question Box! -->
+
+                </div>
+                <div class="col-md-8 offset-md-2" id="answerContainer">
+                    <!-- This is the Answer Box! -->
+                    <div class="col-md-4" id="answerBox">
+                        <div class="btn-primary" id="buttonOne" value="">
+                            Button one!
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" id="answerBox">
+                        <div class="btn-primary" id="buttonTwo" value="">
+                            Button Two!
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" id="answerBox">
+                        <div class="btn-primary" id="buttonThree" value="">
+                            Button Three!
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" id="answerBox">
+                        <div class="btn-primary" id="buttonFour" value="">
+                            Button Four!
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const trivaQuestions = [
+            {
+                question: "Which ocean would you find at Californian beaches?",
+                optionOne: "Atlantic",
+                optionTwo: "Pacific",
+                optionThree: "Indain",
+                optionFour: "Artic",
+                correctChoice: "Pacific",
+            },
+
+            {
+                question: "How long does it take for the Earth to rotate the Sun?",
+                optionOne: "3 Days",
+                optionTwo: "65 Days",
+                optionThree: "365 Days",
+                optionFour: "450 Years",
+                correctChoice: "365 Days",
+            },
+
+            {
+                question: "How many continents are in the world?",
+                optionOne: "12",
+                optionTwo: "18",
+                optionThree: "7",
+                optionFour: "2",
+                correctChoice: "7",
+            },
+
+            {
+                question: "What is the chemical symbol for the element oxygen?",
+                optionOne: "Oxyn",
+                optionTwo: "O",
+                optionThree: "X3",
+                optionFour: "Ox",
+                correctChoice: "O",
+            },
+
+            {
+                question: "Should I get an A+",
+                optionOne: "Yes",
+                optionTwo: "Maybe",
+                optionThree: "Unlikely",
+                optionFour: "Peanuts",
+                correctChoice: "Peanuts",
+            }
+        ]
+
+        var questionIndex = 0;
+        var questionsCorrect = 0;
+        var questionsIncorrect = 0;
+        var questionsNumber = 0;
+        var timerCount = 10;
+        var timerActive = false;
+        var intervalID;
+        var buttonPressed = "";
+        var answer = "";
+
+        function displayQuestion(i) {
+            $("#questionBox").html(trivaQuestions[i].question);
+
+            $("#buttonOne").val(trivaQuestions[i].optionOne).html(trivaQuestions[i].optionOne);
+            $("#buttonTwo").val(trivaQuestions[i].optionTwo).html(trivaQuestions[i].optionTwo);
+            $("#buttonThree").val(trivaQuestions[i].optionThree).html(trivaQuestions[i].optionThree);
+            $("#buttonFour").val(trivaQuestions[i].optionFour).html(trivaQuestions[i].optionFour);
+
+            answer = trivaQuestions[i].correctChoice;
+
+        }
+
+        function displayStats() {
+            $("#questionBox").html("<h2>").text("Questions Correct: " + questionsCorrect + " Questions Incorrect: " + questionsIncorrect);
+
+        }
+
+        function resetTimer() {
+            timerCount = 10;
+
+        }
+
+        function timer() {
+            console.log("[Timer has begun]");
+
+            clearInterval(intervalID);
+            intervalID = setInterval(trivaProgram, 1000);
+
+        }
+
+        function trivaProgram() {
+            timerCount--;
+            console.log(timerCount);
+
+            if (timerActive === false) {
+                timerActive = true;
+
+                if (questionIndex < trivaQuestions.length) {
+                    displayQuestion(questionIndex);
+
+                    questionIndex++;
+
+                }
+            }
+
+            if (timerCount < 0) {
+                console.log("[The Timer has run out]");
+                timerActive = false;
+                questionsIncorrect++;
+
+                resetTimer();
+
+            }
+
+            if(questionsCorrect + questionsIncorrect === 5) {
+                console.log("End of program");
+                clearInterval(intervalID);
+                displayStats();
+
+            }
+        }
+
+        timer();
+        $(".btn-primary").on("click", function () {
+            buttonPressed = $(this).val();
+
+            if (buttonPressed == answer) {
+                questionsCorrect++;
+                console.log("Correct Answers!: " + questionsCorrect);
+
+            }
+
+            else if (buttonPressed != answer) {
+                questionsIncorrect++;
+                console.log("Incorrect Answers!: " + questionsIncorrect);
+
+            }
+
+            timerActive = false;
+            resetTimer();
+
+            if(questionsCorrect + questionsIncorrect === 5) {
+                console.log("End of program");
+                clearInterval(intervalID);
+                displayStats()
+
+            }
+        })
+
+    </script>
+</body>
+
+</html>
